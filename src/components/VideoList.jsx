@@ -4,7 +4,7 @@ var VideoList = (props) => {
 
   let videos = props.videos.map(item => {
     return (
-      <VideoListEntry video={item} />
+      <VideoListEntry key={item.id.videoId} changeVideo={props.changeVideo} video={item} />
     );
   });
 
