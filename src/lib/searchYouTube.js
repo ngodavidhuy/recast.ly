@@ -10,5 +10,13 @@ var searchYouTube = (options, callback) => {
   });
 };
 
+const getVideoDetails = (id, key, callback) => {
+  $.get('https://www.googleapis.com/youtube/v3/videos', {
+    part: 'snippet,contentDetails,statistics',
+    id,
+    key,
+  }, callback);
+};
+
 const debouncedSearchYouTube = _.debounce(searchYouTube, 500);
-export { searchYouTube as default, debouncedSearchYouTube };
+export { searchYouTube as default, debouncedSearchYouTube, getVideoDetails };

@@ -1,7 +1,10 @@
 import VideoList from "./VideoList.js";
-import exampleVideoData from "../data/exampleVideoData.js";
+import VideoDetails from "./VideoDetails.js";
 import VideoPlayer from "./VideoPlayer.js";
 import Search from "./Search.js";
+
+import { getVideoDetails } from "../lib/searchYouTube.js";
+import exampleVideoData from "../data/exampleVideoData.js";
 import YOUTUBE_API_KEY from "../config/youtube.js";
 
 class App extends React.Component {
@@ -9,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       current: {},
-      videos: []
+      videos: [],
+      details: {}
     };
   }
 
@@ -19,9 +23,16 @@ class App extends React.Component {
       max: 10,
       key: YOUTUBE_API_KEY
     };
+
     // fetch data
     this.props.searchYouTube(options, (data) => {
-      // in callback, update our app state
+      // fetch video tails
+      getVideoDetails(data[0].id.videoId, YOUTUBE_API_KEY, (data) => {
+        this.setState({
+          details: data.items[0]
+        });
+      });
+      
       this.setState({
         videos: data,
         current: data[0]
@@ -35,10 +46,17 @@ class App extends React.Component {
         return video.id.videoId === id;
       })[0];
 
+      getVideoDetails(currentVideo.id.videoId, YOUTUBE_API_KEY, (data) => {
+        this.setState({
+          details: data.items[0]
+        });
+      });
+
       return {
         current: currentVideo
       };
     });
+
   }
 
   keyHandler(query) {
@@ -65,6 +83,7 @@ class App extends React.Component {
         <div className="row">
           <div className="col-md-7">
             <VideoPlayer video={this.state.current} />
+            <VideoDetails xferDetails={this.state.details}/>
           </div>
           <div className="col-md-5">
             <VideoList changeVideo={this.clickHandler.bind(this)} videos={this.state.videos} />
