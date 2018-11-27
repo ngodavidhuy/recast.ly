@@ -1,14 +1,31 @@
 import VideoList from "./VideoList.js";
 import exampleVideoData from "../data/exampleVideoData.js";
 import VideoPlayer from "./VideoPlayer.js";
+import YOUTUBE_API_KEY from "../config/youtube.js";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: exampleVideoData[0],
-      videos: exampleVideoData
+      current: {},
+      videos: []
     };
+  }
+
+  componentDidMount() {
+    let options = {
+      query: 'Gordon Ramsay',
+      max: 10,
+      key: YOUTUBE_API_KEY
+    };
+    // fetch data
+    this.props.searchYouTube(options, (data) => {
+      // in callback, update our app state
+      this.setState({
+        videos: data,
+        current: data[0]
+      });
+    });
   }
 
   clickHandler(id) {
