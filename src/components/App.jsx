@@ -1,6 +1,7 @@
 import VideoList from "./VideoList.js";
 import exampleVideoData from "../data/exampleVideoData.js";
 import VideoPlayer from "./VideoPlayer.js";
+import Search from "./Search.js";
 import YOUTUBE_API_KEY from "../config/youtube.js";
 
 class App extends React.Component {
@@ -40,12 +41,25 @@ class App extends React.Component {
     });
   }
 
+  keyHandler(query) {
+    let options = {
+      query,
+      max: 10,
+      key: YOUTUBE_API_KEY
+    };
+    this.props.searchYouTube(options, (data) => {
+      this.setState({
+        videos: data
+      });
+    });
+  }
+
   render() {
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em> view goes here</h5></div>
+            <Search keyHandler={this.keyHandler.bind(this)}/>
           </div>
         </nav>
         <div className="row">

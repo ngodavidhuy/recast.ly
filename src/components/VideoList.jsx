@@ -1,7 +1,6 @@
 import VideoListEntry from './VideoListEntry.js';
 
 var VideoList = (props) => {
-
   let videos = props.videos.map(item => {
     return (
       <VideoListEntry key={item.id.videoId} changeVideo={props.changeVideo} video={item} />
@@ -13,7 +12,6 @@ var VideoList = (props) => {
       {videos}
     </div>
   );
-
 };
 
 // PropTypes tell other developers what `props` a component expects

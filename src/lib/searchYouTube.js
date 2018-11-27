@@ -10,4 +10,5 @@ var searchYouTube = (options, callback) => {
   });
 };
 
-export default searchYouTube;
+const debouncedSearchYouTube = _.debounce(searchYouTube, 500);
+export { searchYouTube as default, debouncedSearchYouTube };
