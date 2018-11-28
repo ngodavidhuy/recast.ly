@@ -16,6 +16,7 @@ class App extends React.Component {
       videos: [],
       details: {},
       comments: [],
+      autoplay: false
     };
   }
 
@@ -44,6 +45,12 @@ class App extends React.Component {
     });
   }
 
+  autoPlayHandler() {
+    this.setState(prevState => {
+      return { autoplay: !prevState.autoplay };
+    });
+  }
+  
   clickHandler(id) {
     this.setState(prevState => {
       let currentVideo = prevState.videos.filter(video => {
@@ -51,12 +58,12 @@ class App extends React.Component {
       })[0];
 
       getVideoDetails(currentVideo.id.videoId, (data) => {
-        console.log(data);
+        // console.log(data);
         this.setState({ details: data.items[0] });
       });
 
       getComments(currentVideo.id.videoId, (data) => {
-        console.log(data);
+        // console.log(data);
         this.setState({ comments: data.items });
       });
 
@@ -89,9 +96,9 @@ class App extends React.Component {
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <VideoPlayer video={this.state.current} />
-            <VideoDetails xferDetails={this.state.details}/>
-            <VideoComments videoComments={this.state.comments}/>
+            <VideoPlayer video={this.state.current} isAutoPlayOn={this.state.autoplay} autoPlayHandler={this.autoPlayHandler.bind(this)} />
+            <VideoDetails xferDetails={this.state.details} />
+            <VideoComments videoComments={this.state.comments} />
           </div>
           <div className="col-md-5">
             <VideoList changeVideo={this.clickHandler.bind(this)} videos={this.state.videos} />
